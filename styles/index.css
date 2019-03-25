@@ -1,0 +1,62 @@
+html {  
+  font-size: 62.5%;
+}
+
+body {
+  background-color: #eee;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.header {
+  clear: both;
+  overflow: hidden;
+
+  padding: 30px;
+}
+
+.logo,
+.title {
+  float: left;
+}
+
+.title {
+  margin-left: 15px;
+  font-size: 4em;
+  height: 50px;
+  line-height: 50px;
+}
+
+.navbar {
+  float: right;
+  width: 40vw;
+  height: 50px;
+}
+
+.navbar__list {
+  clear: both;
+  overflow: hidden;
+}
+
+.navbar__list__item {
+  box-sizing: border-box;
+  float: left;
+  line-height: 50px;
+  width: 10vw;
+  text-align: center;
+  border: 1px solid #333;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.selected {
+  border-bottom: none;
+}
+
+.navbar__list__item a {  
+  text-decoration: none;
+  color: #333;
+  font-size: 2em;
+}
