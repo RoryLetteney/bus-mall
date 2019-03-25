@@ -24,7 +24,7 @@ var allProducts = [
 ];
 var previousProducts = [];
 var totalClicks = 0;
-var numProdToShow = 3;
+var numProdToShow = 5;
 var maxClicks = 25;
 
 function Product(imagePath) {
@@ -76,8 +76,9 @@ function createElements(tag, classes, parent, name, src) {
   classes.forEach(function(name) {
     elToCreate.classList.add(name);
   });
-  if (tag === 'img') {
+  if (tag === 'img' || tag === 'h1') {
     elToCreate.setAttribute('data-name', name);
+    elToCreate.setAttribute('style', `width:${100/numProdToShow}%`);
   }
   if (src) {
     elToCreate.setAttribute('src', src);
@@ -98,8 +99,10 @@ function chooseImage(event) {
     });
     totalClicks++;
   } else {
-    allProducts.forEach(function(product) {
-      // displayResults
+    displayResults();
+    var productImages = Object.values(document.getElementsByClassName('products__image'));
+    productImages.forEach(function(product) {
+      product.removeEventListener('click', chooseImage);
     });
   }
 }
@@ -117,6 +120,15 @@ function showProducts() {
   var productImages = Object.values(document.getElementsByClassName('products__image'));
   productImages.forEach(function(product) {
     product.addEventListener('click', chooseImage);
+  });
+}
+
+function displayResults() {
+  var resultsListEl = document.getElementById('results__list');
+  allProducts.forEach(function(product) {
+    if (product.clicks > 0) {
+      createElements('li', ['results__list__item'], resultsListEl, `${product.name}: ${product.clicks} votes`);
+    }
   });
 }
 
