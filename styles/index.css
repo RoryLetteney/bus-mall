@@ -1,0 +1,97 @@
+html {  
+  font-size: 62.5%;
+}
+
+body {
+  background-color: #eee;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.cols-2 {
+  width: 16.66%;
+  width: calc((100vw / 12) * 2);
+}
+
+.cols-3 {
+  width: 25%;
+  width: calc((100vw / 12) * 3);
+}
+
+.cols-9 {
+  width: 75%;
+  width: calc((100vw / 12) * 9);
+}
+
+.cols-10 {
+  width: 83.33%;
+  width: calc((100vw / 12) * 10);
+}
+
+.main {
+  clear: both;
+  overflow: hidden;
+  
+  min-height: calc(100vh - 230px);
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+
+.header {
+  clear: both;
+  overflow: hidden;
+
+  padding: 30px;
+}
+
+.logo,
+.title {
+  float: left;
+}
+
+.title {
+  margin-left: 15px;
+  font-size: 4em;
+  height: 50px;
+  line-height: 50px;
+}
+
+.navbar {
+  float: right;
+  width: 40vw;
+  height: 50px;
+}
+
+.navbar__list {
+  clear: both;
+  overflow: hidden;
+}
+
+.navbar__list__item {
+  box-sizing: border-box;
+  float: left;
+  line-height: 50px;
+  width: 10vw;
+  text-align: center;
+  border: 1px solid #333;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.selected {
+  border-bottom: none;
+}
+
+.navbar__list__item a {  
+  text-decoration: none;
+  color: #333;
+  font-size: 2em;
+}
+
+.footer {
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+}
