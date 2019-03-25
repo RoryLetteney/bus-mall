@@ -25,6 +25,7 @@ var allProducts = [
 var previousProducts = [];
 var totalClicks = 0;
 var numProdToShow = 3;
+var maxClicks = 25;
 
 function Product(imagePath) {
   this.name = formatProductName(imagePath);
@@ -35,7 +36,7 @@ function Product(imagePath) {
     this.clicks++;
   },
   this.updateViews = function() {
-    this.view++;
+    this.views++;
   };
 }
 
@@ -60,6 +61,7 @@ function pickProducts() {
   while (i < numProdToShow) {
     var randomProduct = randomProductIndex();
     if (!previousProducts.includes(allProducts[randomProduct])) {
+      allProducts[randomProduct].updateViews();
       previousProducts.push(allProducts[randomProduct]);
       results.push(allProducts[randomProduct]);
       i++;
@@ -69,22 +71,52 @@ function pickProducts() {
   return results;
 }
 
-function createElements(tag, classes, parent, src) {
+function createElements(tag, classes, parent, name, src) {
   var elToCreate = document.createElement(tag);
   classes.forEach(function(name) {
     elToCreate.classList.add(name);
   });
+  if (tag === 'img') {
+    elToCreate.setAttribute('data-name', name);
+  }
   if (src) {
     elToCreate.setAttribute('src', src);
+  }
+  if (tag !== 'img') {
+    elToCreate.innerHTML = name;
   }
   parent.appendChild(elToCreate.cloneNode(true));
 }
 
+function chooseImage(event) {
+  if (totalClicks < maxClicks) {
+    showProducts();
+    allProducts.forEach(function(product) {
+      if (event.target.getAttribute('data-name') === product.name) {
+        product.updateClicks();
+      }
+    });
+    totalClicks++;
+  } else {
+    allProducts.forEach(function(product) {
+      // displayResults
+    });
+  }
+}
+
 function showProducts() {
-  var productsSection = document.getElementById('products');
+  var productImagesEl = document.getElementById('products__images');
+  var productNamesEl = document.getElementById('products__names');
+  productImagesEl.innerHTML = '';
+  productNamesEl.innerHTML = '';
   var currentProducts = pickProducts();
   currentProducts.forEach(function(product) {
-    createElements('img', ['products__image'], productsSection, product.imagePath);
+    createElements('img', ['products__image'], productImagesEl, product.name, product.imagePath);
+    createElements('h1', ['products__name'], productNamesEl, product.name);
+  });
+  var productImages = Object.values(document.getElementsByClassName('products__image'));
+  productImages.forEach(function(product) {
+    product.addEventListener('click', chooseImage);
   });
 }
 
