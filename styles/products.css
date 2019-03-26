@@ -1,6 +1,6 @@
 .results,
 .products,
-.description {
+.chart {
     box-sizing: border-box;
 }
 
@@ -9,8 +9,7 @@
     float: left;
 }
 
-.products,
-.description {
+.products {
     float: right;
 }
 
@@ -47,13 +46,19 @@
     box-sizing: border-box;
 }
 
+.products__image:nth-child(2) {
+    display: block;
+}
+
 .products__name {
     font-size: 2em;
     text-align: center;
 }
 
-.description {
+.chart-container {
     padding: 15px;
-    line-height: 20px;
-    font-size: 1.4em;
+    width: 75%;
+    width: calc((100vw / 12) * 9);
+    margin-left: 16.66%;
+    margin-left: calc((100vw / 12) * 2);
 }
