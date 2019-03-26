@@ -141,7 +141,7 @@ function displayResults() {
   });
   allProducts.forEach(function(product) {
     if (product.clicks > 0) {
-      createElements('li', ['results__list__item'], resultsListEl, `${product.name}: ${product.clicks} votes`);
+      createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
     }
   });
   var canvas = document.getElementById('chart').getContext('2d');
@@ -156,6 +156,11 @@ function displayResults() {
       }]
     },
     options: {
+      legend: {
+        labels: {
+          boxWidth: 0
+        }
+      },
       scales: {
         yAxes: [{
           ticks: {
