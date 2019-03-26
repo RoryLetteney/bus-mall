@@ -125,9 +125,44 @@ function showProducts() {
 
 function displayResults() {
   var resultsListEl = document.getElementById('results__list');
+  var labelArray = [];
+  var clicksArray = [];
+  var colorsArray = [];
+  document.getElementById('products').style.display = 'none';
+  function randomColor() {
+    return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
+  }
+  allProducts.forEach(function(product) {
+    if (product.clicks > 0) {
+      labelArray.push(product.name);
+      clicksArray.push(product.clicks);
+      colorsArray.push(randomColor());
+    }
+  });
   allProducts.forEach(function(product) {
     if (product.clicks > 0) {
       createElements('li', ['results__list__item'], resultsListEl, `${product.name}: ${product.clicks} votes`);
+    }
+  });
+  var canvas = document.getElementById('chart').getContext('2d');
+  var resultsChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: labelArray,
+      datasets: [{
+        label: '# of Votes',
+        data: clicksArray,
+        backgroundColor: colorsArray
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
     }
   });
 }
