@@ -45,12 +45,6 @@
     float: left;
     padding: 15px;
     box-sizing: border-box;
-    /* width: 20%; */
-}
-
-.products__image:nth-child(2) {
-    display: block;
-    /* margin: 0 15%; */
 }
 
 .products__name {

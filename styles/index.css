@@ -1,9 +1,11 @@
 html {  
   font-size: 62.5%;
+  color: #333;
+  font-family: 'ZCOOL XiaoWei';
 }
 
 body {
-  background-color: #eee;
+  background-color: #fafafa;
 }
 
 ::-webkit-scrollbar {
@@ -34,7 +36,7 @@ body {
   clear: both;
   overflow: hidden;
   
-  min-height: calc(100vh - 230px);
+  min-height: calc(100vh - 195px);
   margin-bottom: 30px;
   box-sizing: border-box;
 }
@@ -61,7 +63,6 @@ body {
 .navbar {
   float: right;
   width: 40vw;
-  height: 50px;
 }
 
 .navbar__list {
@@ -91,7 +92,7 @@ body {
 }
 
 .footer {
-  height: 90px;
-  line-height: 90px;
+  height: 50px;
+  line-height: 50px;
   text-align: center;
 }
