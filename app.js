@@ -89,6 +89,10 @@ function createElements(tag, classes, parent, name, src) {
   parent.appendChild(elToCreate.cloneNode(true));
 }
 
+function hideProducts() {
+  document.getElementById('products').style.display = 'none';
+}
+
 function chooseImage(event) {
   if (totalClicks < maxClicks) {
     showProducts();
@@ -123,23 +127,14 @@ function showProducts() {
   });
 }
 
-function displayResults() {
+function parseLocalStorage(key) {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+function generateResults(products, labels, clicks, colors) {
   var resultsListEl = document.getElementById('results__list');
-  var labelArray = [];
-  var clicksArray = [];
-  var colorsArray = [];
-  document.getElementById('products').style.display = 'none';
-  function randomColor() {
-    return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
-  }
-  allProducts.forEach(function(product) {
-    if (product.clicks > 0) {
-      labelArray.push(product.name);
-      clicksArray.push(product.clicks);
-      colorsArray.push(randomColor());
-    }
-  });
-  allProducts.forEach(function(product) {
+  console.log(products);
+  products.forEach(function(product) {
     if (product.clicks > 0) {
       createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
     }
@@ -148,11 +143,11 @@ function displayResults() {
   var resultsChart = new Chart(canvas, {
     type: 'bar',
     data: {
-      labels: labelArray,
+      labels: labels,
       datasets: [{
         label: '# of Votes',
-        data: clicksArray,
-        backgroundColor: colorsArray
+        data: clicks,
+        backgroundColor: colors
       }]
     },
     options: {
@@ -172,4 +167,38 @@ function displayResults() {
   });
 }
 
-showProducts();
+function displayResults() {
+  var labelArray = [];
+  var clicksArray = [];
+  var colorsArray = [];
+  hideProducts();
+  function randomColor() {
+    return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
+  }
+  allProducts.forEach(function(product) {
+    if (product.clicks > 0) {
+      labelArray.push(product.name);
+      clicksArray.push(product.clicks);
+      colorsArray.push(randomColor());
+    }
+  });
+  localStorage.setItem('completed', true);
+  localStorage.setItem('productsArray', JSON.stringify(allProducts));
+  localStorage.setItem('labelArray', JSON.stringify(labelArray));
+  localStorage.setItem('clicksArray', JSON.stringify(clicksArray));
+  localStorage.setItem('colorsArray', JSON.stringify(colorsArray));
+  generateResults(allProducts, labelArray, clicksArray, colorsArray);
+}
+
+(function pageState() {
+  if (localStorage.getItem('completed') === 'true') {
+    hideProducts();
+    var lsProducts = parseLocalStorage('productsArray');
+    var lsLabels = parseLocalStorage('labelArray');
+    var lsClicks = parseLocalStorage('clicksArray');
+    var lsColors = parseLocalStorage('colorsArray');
+    generateResults(lsProducts, lsLabels, lsClicks, lsColors);
+  } else {
+    showProducts();
+  }
+}());
