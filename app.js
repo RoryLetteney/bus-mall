@@ -159,7 +159,8 @@ function generateResults(products, labels, clicks, colors) {
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            stepSize: 1
           }
         }]
       }
