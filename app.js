@@ -32,11 +32,15 @@ function Product(imagePath) {
   this.imagePath = imagePath,
   this.clicks = 0,
   this.views = 0,
+  this.color,
   this.updateClicks = function() {
     this.clicks++;
   },
   this.updateViews = function() {
     this.views++;
+  },
+  this.pickColor = function() {
+    this.color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
   };
 }
 
@@ -131,14 +135,28 @@ function parseLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
 
-function generateResults(products, labels, clicks, colors) {
+function generateResults(products) {
   var resultsListEl = document.getElementById('results__list');
-  console.log(products);
-  products.forEach(function(product) {
+  var sortedByClicks = products.sort(function(a, b) { return b.clicks - a.clicks; });
+  var sortedByClickViewRatio = products.sort(function(a, b) { return (Math.round((((b.clicks/b.views).toFixed(2)) * 100))) - (Math.round((((a.clicks/a.views).toFixed(2)) * 100))); });
+  var labels = [];
+  var clicks = [];
+  var colors = [];
+
+  sortedByClickViewRatio.forEach(function(product) {
     if (product.clicks > 0) {
       createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
     }
   });
+
+  for (var product of sortedByClicks) {
+    if (product.clicks > 0) {
+      labels.push(product.name);
+      clicks.push(product.clicks);
+      colors.push(product.color);
+    }
+  }
+
   var chartYMax = Math.max(...clicks) + 1;
   var canvas = document.getElementById('chart').getContext('2d');
   var resultsChart = new Chart(canvas, {
@@ -175,14 +193,11 @@ function displayResults() {
   var clicksArray = [];
   var colorsArray = [];
   hideProducts();
-  function randomColor() {
-    return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
-  }
   allProducts.forEach(function(product) {
     if (product.clicks > 0) {
       labelArray.push(product.name);
       clicksArray.push(product.clicks);
-      colorsArray.push(randomColor());
+      colorsArray.push(product.color);
     }
   });
   localStorage.setItem('completed', true);
