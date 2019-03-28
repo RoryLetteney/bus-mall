@@ -139,6 +139,7 @@ function generateResults(products, labels, clicks, colors) {
       createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
     }
   });
+  var chartYMax = Math.max(...clicks) + 1;
   var canvas = document.getElementById('chart').getContext('2d');
   var resultsChart = new Chart(canvas, {
     type: 'bar',
@@ -160,6 +161,7 @@ function generateResults(products, labels, clicks, colors) {
         yAxes: [{
           ticks: {
             beginAtZero: true,
+            max: chartYMax,
             stepSize: 1
           }
         }]
