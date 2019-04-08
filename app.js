@@ -217,6 +217,9 @@ function displayResults() {
     var lsColors = parseLocalStorage('colorsArray');
     generateResults(lsProducts, lsLabels, lsClicks, lsColors);
   } else {
+    for (var product of allProducts) {
+      product.pickColor();
+    }
     showProducts();
   }
 }());
