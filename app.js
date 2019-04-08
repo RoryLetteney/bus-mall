@@ -24,7 +24,7 @@ var allProducts = [
 ];
 var previousProducts = [];
 var totalClicks = 0;
-var numProdToShow = 5;
+var numProdToShow = 3;
 var maxClicks = 25;
 
 function Product(imagePath) {
@@ -86,6 +86,7 @@ function createElements(tag, classes, parent, name, src) {
   }
   if (src) {
     elToCreate.setAttribute('src', src);
+    elToCreate.style.height = `${1000 / numProdToShow}px`;
   }
   if (tag !== 'img') {
     elToCreate.innerHTML = name;
@@ -138,17 +139,10 @@ function parseLocalStorage(key) {
 function generateResults(products) {
   var resultsListEl = document.getElementById('results__list');
   var sortedByClicks = products.sort(function(a, b) { return b.clicks - a.clicks; });
-  var sortedByClickViewRatio = products.sort(function(a, b) { return (Math.round((((b.clicks/b.views).toFixed(2)) * 100))) - (Math.round((((a.clicks/a.views).toFixed(2)) * 100))); });
+
   var labels = [];
   var clicks = [];
   var colors = [];
-
-  sortedByClickViewRatio.forEach(function(product) {
-    if (product.clicks > 0) {
-      createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
-    }
-  });
-
   for (var product of sortedByClicks) {
     if (product.clicks > 0) {
       labels.push(product.name);
@@ -156,6 +150,14 @@ function generateResults(products) {
       colors.push(product.color);
     }
   }
+
+  var sortedByClickViewRatio = products.sort(function(a, b) { return (Math.round((((b.clicks/b.views).toFixed(2)) * 100))) - (Math.round((((a.clicks/a.views).toFixed(2)) * 100))); });
+
+  sortedByClickViewRatio.forEach(function(product) {
+    if (product.clicks > 0) {
+      createElements('li', ['results__list__item'], resultsListEl, `${product.name} chosen ${Math.round((((product.clicks/product.views).toFixed(2)) * 100))}% of the time`);
+    }
+  });
 
   var chartYMax = Math.max(...clicks) + 1;
   var canvas = document.getElementById('chart').getContext('2d');
@@ -189,33 +191,16 @@ function generateResults(products) {
 }
 
 function displayResults() {
-  var labelArray = [];
-  var clicksArray = [];
-  var colorsArray = [];
   hideProducts();
-  allProducts.forEach(function(product) {
-    if (product.clicks > 0) {
-      labelArray.push(product.name);
-      clicksArray.push(product.clicks);
-      colorsArray.push(product.color);
-    }
-  });
-  localStorage.setItem('completed', true);
   localStorage.setItem('productsArray', JSON.stringify(allProducts));
-  localStorage.setItem('labelArray', JSON.stringify(labelArray));
-  localStorage.setItem('clicksArray', JSON.stringify(clicksArray));
-  localStorage.setItem('colorsArray', JSON.stringify(colorsArray));
-  generateResults(allProducts, labelArray, clicksArray, colorsArray);
+  generateResults(allProducts);
 }
 
 (function pageState() {
-  if (localStorage.getItem('completed') === 'true') {
+  if (localStorage.getItem('productsArray')) {
     hideProducts();
     var lsProducts = parseLocalStorage('productsArray');
-    var lsLabels = parseLocalStorage('labelArray');
-    var lsClicks = parseLocalStorage('clicksArray');
-    var lsColors = parseLocalStorage('colorsArray');
-    generateResults(lsProducts, lsLabels, lsClicks, lsColors);
+    generateResults(lsProducts);
   } else {
     for (var product of allProducts) {
       product.pickColor();
